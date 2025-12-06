@@ -13,12 +13,17 @@ app.use(express.json());
 
 // ==== MongoDB connection ====
 // Railway дээр MONGO_URL env var ашиглана (эсвэл Atlas-ийн URL)
-const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/simpledb";
+const MONGO_URL = process.env.MONGO_URL;
+if (!MONGO_URL) {
+  console.error("MONGO_URL is not set!");
+  process.exit(1);
+}
 
 mongoose
   .connect(MONGO_URL)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("Mongo error:", err));
+
 
 // ==== Schema & Model ====
 const itemSchema = new mongoose.Schema({
